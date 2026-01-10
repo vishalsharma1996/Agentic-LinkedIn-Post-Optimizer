@@ -92,3 +92,86 @@ agentic-linkedin-post-optimizer/
 
 ---
 
+## Model Configuration & Rationale
+
+This project intentionally uses **different LLMs for different agent roles**.  
+Each agent has a distinct responsibility, and model choice is aligned to that responsibility.
+
+The goal is **consistency, control, and cost-awareness**, not using a single model everywhere.
+
+---
+
+### Generator Agent
+
+**Model:** `gpt-4.1`  
+**Temperature:** `0.6`
+
+**Why this model?**
+- Produces realistic, experience-driven engineering narratives
+- Handles strict structural constraints (opening line + numbered points)
+- Balances creativity with technical grounding
+
+The generator’s job is to **draft** content that feels like it was written by a senior engineer, not to be perfect.
+
+---
+
+### Evaluator Agent (Most Critical)
+
+**Model:** `gpt-4.1`  
+**Temperature:** `0.0`
+
+**Why this model?**
+- Highly consistent judgment across iterations
+- Strong at structural validation and quality assessment
+- Minimizes scoring drift and contradictory feedback
+
+The evaluator **does not decide acceptance**.  
+It only scores and critiques — final acceptance is enforced in code.
+
+This separation is intentional and mirrors real production systems.
+
+---
+
+### Optimizer Agent
+
+**Model:** `gpt-4.1-mini`  
+**Temperature:** `0.3`
+
+**Why this model?**
+- Excellent at constrained rewriting and refinement
+- Less prone to hallucinating new ideas
+- Significantly cheaper than full-size models
+
+The optimizer improves **density, clarity, and precision** without altering intent or structure.
+
+---
+
+### Why Not Use One Model Everywhere?
+
+Using a single model for all agents often leads to:
+- Inconsistent evaluation
+- Over-optimization
+- Higher costs
+- Poor debuggability
+
+By specializing models per role, the system achieves:
+- More stable convergence
+- Lower overall cost
+- Clearer failure modes
+- Better alignment with agent responsibilities
+
+---
+
+### Summary Table
+
+| Agent Role | Model | Temperature | Purpose |
+|----------|------|------------|--------|
+| Generator | `gpt-4.1` | 0.6 | Create structured, realistic drafts |
+| Evaluator | `gpt-4.1` | 0.0 | Strict, consistent scoring & feedback |
+| Optimizer | `gpt-4.1-mini` | 0.3 | Precise refinement under constraints |
+
+---
+
+**Key Principle:**
+> LLMs generate content and opinions.  
+> Code enforces control, stopping conditions, and acceptance.
