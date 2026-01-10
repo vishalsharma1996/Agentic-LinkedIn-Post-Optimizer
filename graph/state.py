@@ -1,4 +1,4 @@
-from typing import TypedDict, Literal
+from typing import TypedDict, Literal, List, Dict, Any
 
 class LinkedInPostState(TypedDict):
     topic: str
@@ -8,3 +8,4 @@ class LinkedInPostState(TypedDict):
     quality_score: int
     iteration_count: int
     max_iterations: int
+    history: List[Dict[str, Any]]
