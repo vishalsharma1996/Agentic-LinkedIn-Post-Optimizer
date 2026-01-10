@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
 from graph.workflow import linkedin_post_workflow
+from fastapi.responses import PlainTextResponse
+
 
 app = FastAPI(
     title="Agentic LinkedIn Post Optimizer",
@@ -42,3 +44,21 @@ def optimize_linkedin_post(request: PostRequest):
         "final_score": final_state.get("quality_score", 0),
         "review_decision": final_state.get("review_decision", "unknown"),
     }
+
+@app.post("/optimize/text", response_class=PlainTextResponse)
+def optimize_linkedin_post_text(request: PostRequest):
+    """
+    Returns the final LinkedIn post as plain text,
+    formatted exactly as it should appear when posted.
+    """
+
+    initial_state = {
+        "topic": request.topic,
+        "iteration_count": 0,
+        "max_iterations": request.max_iterations,
+        "history": [],
+    }
+
+    final_state = linkedin_post_workflow.invoke(initial_state)
+
+    return final_state["draft_post"]
