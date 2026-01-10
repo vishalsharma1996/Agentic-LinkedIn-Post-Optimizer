@@ -175,3 +175,31 @@ By specializing models per role, the system achieves:
 **Key Principle:**
 > LLMs generate content and opinions.  
 > Code enforces control, stopping conditions, and acceptance.
+
+## How to Run the Project
+
+You can run this project **locally** or using **Docker**.  
+Both approaches expose the same FastAPI endpoints.
+
+---
+
+## Prerequisites
+
+- Python **3.10+**
+- An OpenAI API key
+- (Optional) Docker
+
+Set your OpenAI API key as an environment variable:
+
+```bash
+export OPENAI_API_KEY=sk-xxxx
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+
+docker build -t agentic-linkedin-post-optimizer .
+docker run -p 8000:8000 \
+  -e OPENAI_API_KEY=sk-xxxx \
+  agentic-linkedin-post-optimizer
+
+
+
