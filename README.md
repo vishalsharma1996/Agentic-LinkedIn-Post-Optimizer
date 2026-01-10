@@ -28,6 +28,9 @@ The goal is not “better prompts”, but **better loops**.
 ---
 
 ## Repository Structure
+
+![Architecture](docs/architecture.png)
+
 ```text
 agentic-linkedin-post-optimizer/
 │
