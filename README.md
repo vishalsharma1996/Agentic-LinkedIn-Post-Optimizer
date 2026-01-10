@@ -28,7 +28,7 @@ The goal is not “better prompts”, but **better loops**.
 ---
 
 ## Repository Structure
-
+```text
 agentic-linkedin-post-optimizer/
 │
 ├── app/
@@ -53,7 +53,7 @@ agentic-linkedin-post-optimizer/
 ├── Dockerfile
 ├── requirements.txt
 ├── .dockerignore
-
+```
 
 ---
 
