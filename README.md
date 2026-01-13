@@ -331,10 +331,16 @@ docker run -p 8000:8000 \
   agentic-linkedin-post-optimizer
 ```
 ## FASTAPI EndPoint
+
 ![Architecture](docs/s1.png)
 
-## ExampleOutput
+## ExampleOutput(## Virality Post)
 ![Architecture](docs/s2.png)
+
+![Architecture](docs/s3.png)
+
+## ExampleOutput(## Story Driven)
+![Architecture](docs/s4.png)
 
 
 
