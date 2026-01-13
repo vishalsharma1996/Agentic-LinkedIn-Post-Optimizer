@@ -3,53 +3,53 @@ from graph.state import LinkedInPostState
 from models.llm_config import optimizer_llm
 
 
+PROOF_OF_WORK_SYSTEM = (
+    "You refine proof-of-work posts written by senior AI engineers.\n"
+    "STRICT RULES:\n"
+    "- Preserve all user-provided metrics verbatim.\n"
+    "- Do NOT add new facts or mechanisms.\n"
+    "- You MAY strengthen bounded interpretation derived from existing facts.\n"
+    "- You MAY remove bullets, merge claims, or reformat structure.\n"
+    "- Fewer, denser claims are preferred over padded structure."
+)
+
+TECH_THOUGHT_LEADERSHIP_SYSTEM = (
+    "You refine tech thought leadership posts.\n"
+    "Maintain structured sections.\n"
+    "Reduce abstraction and improve clarity."
+)
+
+
 def optimize_linkedin_post(state: LinkedInPostState) -> LinkedInPostState:
+    intent = state["intent"]
+
+    system_prompt = (
+        TECH_THOUGHT_LEADERSHIP_SYSTEM
+        if intent == "TECH_THOUGHT_LEADERSHIP"
+        else PROOF_OF_WORK_SYSTEM
+    )
+
     messages = [
-        SystemMessage(
-            content=(
-                "You refine LinkedIn posts written by senior AI engineers. "
-                "You increase clarity and density while preserving real-world credibility."
-            )
-        ),
+        SystemMessage(content=system_prompt),
         HumanMessage(
             content=f"""
-Revise the post using the feedback below.
+Revise the post below.
 
 Feedback:
 {state["review_feedback"]}
 
-Current Draft:
+Draft:
 \"\"\"
 {state["draft_post"]}
 \"\"\"
 
-REQUIRED FINAL OUTPUT FORMAT (must follow exactly):
+GOAL:
+- Increase density
+- Remove filler
+- Strengthen senior POV
+- Preserve factual integrity
 
-[One strong opening line]
-
-1) ...
-2) ...
-3) ...
-4) ...
-5) ...
-
-#hashtags
-
-STRICT ENFORCEMENT RULES:
-- Exactly ONE opening line.
-- Exactly FIVE numbered points (1–5).
-- Each numbered point must be 2–3 lines long.
-- Increase information density without adding fluff.
-- Ensure each point reflects cause → effect → engineering decision.
-- Rewrite vague statements into concrete system behavior.
-- Do NOT split or merge points.
-- Do NOT turn points into essays.
-- Remove blog-style, academic, or neutral explainer phrasing.
-- Remove any questions or engagement bait.
-- Add 3–5 relevant hashtags ONLY at the end.
-- Plain text only. No markdown.
-
-The final output must be publish-ready for LinkedIn.
+Return LinkedIn-ready text.
 """
         ),
     ]
