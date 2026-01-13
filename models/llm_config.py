@@ -1,19 +1,25 @@
 from langchain_openai import ChatOpenAI
 
-# Generator: creative but grounded
+# Intent Classifier LLM (Consistent Output)
+intent_classifier_llm = ChatOpenAI(
+    model="gpt-4.1-mini",
+    temperature=0.0,
+)
+
+# Writer — strong POV, fluent, confident
 generator_llm = ChatOpenAI(
     model="gpt-4.1",
     temperature=0.6,
 )
 
-# Evaluator: strict, consistent judgment
+# Editor — harsher, less impressed by fluency
 evaluator_llm = ChatOpenAI(
-    model="gpt-4.1",
+    model="gpt-4.1-mini",
     temperature=0.0,
 )
 
-# Optimizer: precise rewriting under constraints
+# Line editor — surgical rewrites only
 optimizer_llm = ChatOpenAI(
-    model="gpt-4.1-mini",
-    temperature=0.3,
+    model="gpt-4o-mini",
+    temperature=0.2,
 )
