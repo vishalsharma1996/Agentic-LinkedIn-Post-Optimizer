@@ -232,19 +232,33 @@ All traces are recorded in LangSmith for inspection.
 
 ---
 
-## Model Configuration
+## Model Configuration by Agent Role
 
-Generator:
-- Model: gpt-4.1
-- Temperature: 0.6
+### Generator (Writer)
+- **Model:** gpt-4.1  
+- **Temperature:** 0.6  
+- **Purpose:** Draft realistic, senior-engineer content with strong POV and bounded interpretation.
 
-Evaluator:
-- Model: gpt-4.1-mini
-- Temperature: 0.0
+### Evaluator (Editor)
+- **Model:** gpt-4.1-mini  
+- **Temperature:** 0.0  
+- **Purpose:** Strict, deterministic scoring and critique; never decides acceptance.
 
-Optimizer:
-- Model: gpt-4o-mini
-- Temperature: 0.2–0.3
+### Optimizer (Line Editor)
+- **Model:** gpt-4o-mini  
+- **Temperature:** 0.2–0.3  
+- **Purpose:** Constrained refinement of weak dimensions only; improves clarity and density without adding facts.
+
+### Intent Classifier
+- **Model:** gpt-4.1-mini  
+- **Temperature:** 0.0  
+- **Purpose:** Deterministically classify intent (Proof of Work vs Tech Thought Leadership) to enforce downstream constraints.
+
+### Summarizer (Change Summary)
+- **Model:** gpt-4.1-mini  
+- **Temperature:** 0.0  
+- **Purpose:** Explain changes between the initial draft and the best iteration; no re-evaluation or new claims.
+
 
 Using separate models prevents self-agreeing loops and improves convergence.
 
