@@ -274,25 +274,40 @@ Returns plain-text, LinkedIn-ready output
 
 ---
 
-## Running the Project
+# Running the Project
 
-Prerequisites:
-- Python 3.10+
-- OpenAI API key
-- Optional Docker
-- Optional LangSmith account
+This section explains how to run the Agentic LinkedIn Post Optimizer locally or with Docker.  
+Both methods expose the same FastAPI endpoints and support full experiment tracking via LangSmith.
 
-Environment variables:
+---
 
-export OPENAI_API_KEY=sk-xxxx  
-export LANGSMITH_API_KEY=ls-xxxx  
-export LANGSMITH_TRACING=true  
+## Prerequisites
+
+Before running the project, ensure you have:
+
+- **Python 3.10+**
+- **An OpenAI API key**
+- **Docker** (optional, for containerized runs)
+- **A LangSmith account** (optional but recommended for tracing and observability)
+
+---
+
+## Environment Variables
+
+Set the following environment variables before starting the service:
+
+```bash
+export OPENAI_API_KEY=sk-xxxx
+export LANGSMITH_API_KEY=ls-xxxx
+export LANGSMITH_TRACING=true
 export LANGSMITH_PROJECT=agentic-linkedin-post-optimizer
+
 
 Local run:
 
-pip install -r requirements.txt  
+pip install -r requirements.txt
 uvicorn app.main:app --reload
+http://localhost:8000
 
 Docker run:
 
