@@ -1,5 +1,6 @@
 langchain == 1.2.0
 langgraph == 1.0.5
+langsmith == 0.6.1
 langchain-openai
 fastapi
 uvicorn
