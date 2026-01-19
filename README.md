@@ -70,7 +70,7 @@ agentic-linkedin-post-optimizer/
 |   └── costs.py             # Tracks LLM Calls along with Estimated Costs
 │
 ├── prompts/
-│   ├── intent_classifier.py
+│   ├── intent_classifier.py # Intent classifier
 │   ├── generator.py         # Writer agent
 │   ├── evaluator.py         # Editor agent (strict scoring)
 │   ├── optimizer.py         # Line editor agent
