@@ -1,5 +1,5 @@
 # Use a slim, stable Python base
-FROM python:3.11-slim
+FROM python:3.12-slim
 
 # Prevent Python from writing pyc files and buffering stdout
 ENV PYTHONDONTWRITEBYTECODE=1
