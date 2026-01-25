@@ -68,6 +68,7 @@ agentic-linkedin-post-optimizer/
 │   └── workflow.py          # LangGraph control flow & stop logic
 |   └── observability.py     # Tracks LLM Cost per Agent/Node
 |   └── costs.py             # Tracks LLM Calls along with Estimated Costs
+|   └── guards.py            # Added Fail Soft Guard 
 │
 ├── prompts/
 │   ├── intent_classifier.py # Intent classifier
@@ -199,6 +200,8 @@ Regression guards:
 - First optimization regression → stop
 - Later focus regression → rollback and stop
 - Focus flattened + non-focus regression → rollback and stop
+- Fail-soft termination (e.g. evaluator or generator failure) is treated as a first-class stop condition and logged explicitly for post-run analysis.
+
 
 Best iteration guarantee:
 - Best iteration tracked after every evaluation
@@ -234,6 +237,7 @@ Each iteration logs:
 - Best-iteration deltas
 - Rollback events
 - Stop reasons
+- Fail-soft termination reasons (e.g. LLM timeout, API failure) are recorded in Stop reasons
 
 All traces are recorded in LangSmith for inspection.
 
