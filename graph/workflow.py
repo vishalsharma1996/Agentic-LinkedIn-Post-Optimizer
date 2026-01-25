@@ -104,7 +104,11 @@ def rollback_to_best(state: LinkedInPostState) -> LinkedInPostState:
 
 
 def should_continue(state: LinkedInPostState):
-
+    
+    # 🔒 FAIL-SOFT GUARD
+    if state.get('__fail_soft__'):
+        return 'summarize_changes'
+    
     # 0. Early stop: strong generator output
     if state["iteration_count"] == 0 and state["quality_score"] >= 40:
         state["run_metrics"]["stop_reason"] = "Strong_initial_draft"
