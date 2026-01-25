@@ -1,6 +1,7 @@
 from langchain_core.messages import SystemMessage, HumanMessage
 from graph.state import LinkedInPostState
 from models.llm_config import generator_llm
+from graph.guards import safe_llm_call
 
 
 # ---------- INTENT RULES ----------
@@ -49,35 +50,39 @@ STYLE_PROMPTS = {
 
 
 def generate_linkedin_post(state: LinkedInPostState) -> LinkedInPostState:
-    intent = state["intent"]
-    style = state["communication_style"]
+    def _generate(state):
+        intent = state["intent"]
+        style = state["communication_style"]
 
-    intent_prompt = (
-        TECH_THOUGHT_LEADERSHIP_SYSTEM
-        if intent == "TECH_THOUGHT_LEADERSHIP"
-        else PROOF_OF_WORK_SYSTEM
-    )
+        intent_prompt = (
+            TECH_THOUGHT_LEADERSHIP_SYSTEM
+            if intent == "TECH_THOUGHT_LEADERSHIP"
+            else PROOF_OF_WORK_SYSTEM
+        )
 
-    style_prompt = STYLE_PROMPTS[style]
+        style_prompt = STYLE_PROMPTS[style]
 
-    messages = [
-        SystemMessage(content=intent_prompt),
-        SystemMessage(content=style_prompt),
-        HumanMessage(
-            content=f"""
-Write a LinkedIn post based ONLY on the information below.
+        messages = [
+            SystemMessage(content=intent_prompt),
+            SystemMessage(content=style_prompt),
+            HumanMessage(
+                content=f"""
+    Write a LinkedIn post based ONLY on the information below.
 
-Topic:
-{state["topic"]}
+    Topic:
+    {state["topic"]}
 
-IMPORTANT:
-- For PROOF_OF_WORK: focus on claims, not formatting.
-- For TECH_THOUGHT_LEADERSHIP: use clear structured sections.
-- Plain text only.
-"""
-        ),
-    ]
-
-    response = generator_llm.invoke(messages).content
-
-    return {"draft_post": response}
+    IMPORTANT:
+    - For PROOF_OF_WORK: focus on claims, not formatting.
+    - For TECH_THOUGHT_LEADERSHIP: use clear structured sections.
+    - Plain text only.
+    """
+            ),
+        ]
+        
+        response = generator_llm.invoke(messages).content
+        return {"draft_post": response}
+    result = safe_llm_call(_generate,state,agent_name='generator')
+    if '__fail_soft__' in result:
+        return result
+    return result
