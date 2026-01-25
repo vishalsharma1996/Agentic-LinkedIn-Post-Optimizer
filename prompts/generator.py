@@ -2,6 +2,7 @@ from langchain_core.messages import SystemMessage, HumanMessage
 from graph.state import LinkedInPostState
 from models.llm_config import generator_llm
 from graph.guards import safe_llm_call
+from graph.costs import charge_cost
 
 
 # ---------- INTENT RULES ----------
@@ -79,7 +80,8 @@ def generate_linkedin_post(state: LinkedInPostState) -> LinkedInPostState:
     """
             ),
         ]
-        
+
+        charge_cost(state, 'generator')
         response = generator_llm.invoke(messages).content
         return {"draft_post": response}
     result = safe_llm_call(_generate,state,agent_name='generator')
