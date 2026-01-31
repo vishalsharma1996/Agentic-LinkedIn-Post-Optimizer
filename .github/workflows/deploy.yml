@@ -1,14 +1,29 @@
+# Deploy to Azure Container Apps
+# --------------------------------
+# This GitHub Actions workflow enables MANUAL, tag-controlled deployments.
+# It does NOT build images.
+# It deploys an EXISTING Docker image from Azure Container Registry (ACR)
+# to an already-created Azure Container App.
+#
+# Deployment guarantees:
+# - No automatic deploys on push
+# - Explicit human-triggered deployments
+# - Exact image tag control
+# - Revision-based rollouts in Azure
+# - Easy rollback by redeploying an older tag
+
 name: Deploy to Azure Container Apps
 
 on:
   workflow_dispatch:
     inputs:
       image_tag:
-        description: "Docker image tag to deploy (e.g. latest, v1.0.0, commit SHA)"
+        description: "Docker image tag to deploy (e.g. v2, commit SHA)"
         required: true
 
+# Non-secret configuration values
 env:
-  ACR_NAME: agenticacr001
+  ACR_NAME: agenticacr001                  # Azure Container Registry name
   IMAGE_NAME: agentic-linkedin-post-optimizer
   RESOURCE_GROUP: rg-agentic-linkedin
   CONTAINER_APP_NAME: agentic-linkedin-app
@@ -18,15 +33,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Authenticates GitHub runner with Azure
+      # Uses a Service Principal stored as a GitHub secret
       - name: Login to Azure
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      # Updates the Container App to use the selected image tag
+      # This creates a NEW revision in Azure Container Apps
       - name: Deploy selected image tag
         run: |
           az containerapp update \
             --name $CONTAINER_APP_NAME \
             --resource-group $RESOURCE_GROUP \
             --image $ACR_NAME.azurecr.io/$IMAGE_NAME:${{ inputs.image_tag }}
+
+# Usage:
+# 1) Build & push image to ACR (separate step/workflow)
+# 2) Go to GitHub Actions → Run workflow
+# 3) Enter the image tag to deploy
+# 4) Azure rolls out a new revision
+#
+# Rollback:
+# Re-run this workflow with an older image tag
+
 
