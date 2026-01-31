@@ -1,0 +1,32 @@
+name: Deploy to Azure Container Apps
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: "Docker image tag to deploy (e.g. latest, v1.0.0, commit SHA)"
+        required: true
+
+env:
+  ACR_NAME: agenticacr001
+  IMAGE_NAME: agentic-linkedin-post-optimizer
+  RESOURCE_GROUP: rg-agentic-linkedin
+  CONTAINER_APP_NAME: agentic-linkedin-app
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy selected image tag
+        run: |
+          az containerapp update \
+            --name $CONTAINER_APP_NAME \
+            --resource-group $RESOURCE_GROUP \
+            --image $ACR_NAME.azurecr.io/$IMAGE_NAME:${{ inputs.image_tag }}
+
