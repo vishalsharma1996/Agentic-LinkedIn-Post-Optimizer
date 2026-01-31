@@ -89,7 +89,7 @@ agentic-linkedin-post-optimizer/
 ├── requirements.txt
 |── .dockerignore
 ├── .github/
-│   ├── workflows\deploy.yml          # Deploys the pushed image to the container 
+│   ├── workflows/deploy.yml          # Deploys the pushed image to the container 
 ```
 ---
 
@@ -333,7 +333,7 @@ docker run -p 8000:8000 \
   -e LANGSMITH_PROJECT=agentic-linkedin-post-optimizer \
   agentic-linkedin-post-optimizer
 
-👉 Full Azure deployment guide: [docs/deployment.md](docs/deployment.md)
+👉 Full Azure deployment guide: [docs/deployment.md]
 ```
 ---
 
