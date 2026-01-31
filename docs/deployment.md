@@ -15,7 +15,7 @@ az acr create \
   --resource-group rg-agentic-linkedin \
   --name agenticacr001 \
   --sku Basic \
-  --admin-enabled true
+  --admin-enabled false
 
 Push Docker Image to ACR:
 
