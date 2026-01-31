@@ -333,7 +333,7 @@ docker run -p 8000:8000 \
   -e LANGSMITH_PROJECT=agentic-linkedin-post-optimizer \
   agentic-linkedin-post-optimizer
 
-👉 Full Azure deployment guide: ![Deplyment_Guid][docs/deployment.md]
+👉 Full Azure deployment guide: [docs/deployment.md]
 ```
 ---
 
