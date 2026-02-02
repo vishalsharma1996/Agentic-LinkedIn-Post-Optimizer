@@ -20,9 +20,24 @@ az acr create \
 Push Docker Image to ACR:
 
 az acr login --name agenticacr001
-docker tag agentic-linkedin-post-optimizer \
-  agenticacr001.azurecr.io/agentic-linkedin-post-optimizer:v1
-docker push agenticacr001.azurecr.io/agentic-linkedin-post-optimizer:v1
+
+### Push Image Using Guarded Script
+
+From the project root (where `Dockerfile` and `push.sh` exist):
+
+./push.sh <IMAGE_TAG>
+
+Example:
+
+./push.sh v2
+
+What this does:
+- Checks whether the image tag already exists in ACR
+- Fails immediately if the tag is already present
+- Builds the Docker image locally
+- Pushes the image only if the tag is new
+
+This guarantees that each tag is **immutable** and cannot be overwritten.
 
 Register Azure Providers (One-Time):
 
